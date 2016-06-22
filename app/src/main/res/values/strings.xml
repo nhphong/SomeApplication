@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">SomeApplication</string>
+
+    <string name="correct">Correct!</string>
+    <string name="try_again">Try again</string>
+
+    <string name="emotions">Emotions</string>
+    <string name="environment">Environment</string>
+    <string name="traffic_safety">Traffic Safety</string>
+    <string name="education">Education</string>
 </resources>
