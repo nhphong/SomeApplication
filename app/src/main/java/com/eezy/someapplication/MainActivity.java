@@ -106,3 +106,4 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         return mMediaUtil.isBackgroundMusic1Allowed();
     }
 }
+
