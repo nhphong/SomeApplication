@@ -52,6 +52,12 @@ public class MultiPaneView extends View implements View.OnTouchListener {
         }
     }
 
+    public void removeAllPanes() {
+        if (mPanes != null) {
+            mPanes.clear();
+        }
+    }
+
     public void addConnection(Pane srcPane, Pane destPane) {
         if (mPanes.contains(srcPane) && mPanes.contains(destPane)) {
             PaneConnection pc = new PaneConnection(srcPane, destPane);

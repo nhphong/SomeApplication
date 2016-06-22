@@ -44,6 +44,12 @@ public class DragablePaneView extends MultiPaneView implements MultiPaneView.OnT
         }
     }
 
+    public void resetTargetPaneReachListener() {
+        mTargetPanes.clear();
+        mSrcPanes.clear();
+        mTargetPaneReachListeners.clear();
+    }
+
     public void setOnDraggingListener(OnDraggingListener listener) {
         mOnDraggingListener = listener;
     }

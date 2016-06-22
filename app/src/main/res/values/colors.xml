@@ -19,4 +19,5 @@
     <color name="orange">#757B0B</color>
     <color name="happy_parents_guide_text_color">#757B0B</color>
     <color name="sharing_parents_guide_text_color">#850022</color>
+    <color name="desc_color">#936C43</color>
 </resources>
