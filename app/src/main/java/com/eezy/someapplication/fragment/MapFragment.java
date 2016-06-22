@@ -117,6 +117,7 @@ public class MapFragment extends Fragment implements MultiPaneView.OnTouchListen
         if (event.getAction() == MotionEvent.ACTION_UP && touchedPane != null) {
             switch (touchedPane.getName()) {
                 case HAPPY_STORY:
+                    HappyFacialFragment.launch(mActivity);
                     break;
                 case SAD_STORY:
                     break;
