@@ -56,9 +56,9 @@ public abstract class BaseMatchingFragment extends Fragment {
 
         List<Integer> resIds = retrieveResources();
 
-        int top = (int) (screenSize.y * 0.28);
+        int top = (int) (screenSize.y * 0.27);
         int bottom = (int) (screenSize.y * 0.46);
-        int side = bottom - top;
+        int side = 2 * (bottom - top) / 3;
         int margin = (int) (screenSize.x * 0.14);
         int smallMargin = margin / 8;
 
@@ -122,7 +122,7 @@ public abstract class BaseMatchingFragment extends Fragment {
 
         for (int i = 0; i < resIds.size(); ++i) {
             Pane pivotPane;
-            int offset = side + 3 * smallMargin;
+            int offset = (bottom - top) + 3 * smallMargin;
 
             if (i == 0) {
                 pivotPane = cause1;
@@ -139,7 +139,7 @@ public abstract class BaseMatchingFragment extends Fragment {
             }
 
             Point center = pivotPane.center(0, offset);
-            Pane p = new Pane(null, GeoUtil.inflate(center, side / 2));
+            Pane p = new Pane(null, GeoUtil.inflate(center, side / 2, (bottom - top) / 2));
             int id = resIds.get(i);
             setPaneBackgroundAndDescription(p, id, Content.getCaseDescription(id));
             p.setMovable(true);
