@@ -12,6 +12,7 @@ import com.eezy.someapplication.fragment.ExtremelyDifficultMatchingFragment;
 import com.eezy.someapplication.fragment.MapFragment;
 import com.eezy.someapplication.util.MediaUtil;
 import com.eezy.someapplication.view.NavigationControl;
+import com.eezy.someapplication.view.ScoreView;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -19,6 +20,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     private NavigationControl mControl;
     private MediaUtil mMediaUtil;
+    private ScoreView mScoreView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -30,6 +32,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         findViewById(R.id.btn_3).setOnClickListener(this);
         mControl = (NavigationControl) findViewById(R.id.navigation_control);
         mMediaUtil = new MediaUtil(this);
+        mScoreView = (ScoreView) findViewById(R.id.score_view);
+        mScoreView.setScore(0);
         MapFragment.launch(this);
     }
 
@@ -70,6 +74,14 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     public void setSteps(Integer currentStep, Integer totalNumOfSteps) {
         mControl.setSteps(currentStep, totalNumOfSteps);
+    }
+
+    public void showScore(boolean show) {
+        mScoreView.setVisibility(show ? View.VISIBLE : View.GONE);
+    }
+
+    public void addScore(int score) {
+        mScoreView.addScore(score);
     }
 
     public void sayYay1() {

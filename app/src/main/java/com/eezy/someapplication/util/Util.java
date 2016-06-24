@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment;
 
 import com.eezy.someapplication.MainActivity;
 import com.eezy.someapplication.R;
+import com.eezy.someapplication.view.Character;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,21 +13,25 @@ import java.util.Random;
 
 public class Util {
 
-    public static void launchFragment(MainActivity activity, Fragment fragment, Integer currentStep, Integer totalNumOfSteps, String TAG) {
+    public static void launchFragment(MainActivity activity, Fragment fragment, Integer currentStep, Integer totalNumOfSteps, String TAG, boolean showScore) {
+        Character.remove(activity);
         activity.getSupportFragmentManager()
                 .beginTransaction()
                 .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left)
                 .replace(R.id.fragment_container, fragment, TAG)
                 .commit();
         activity.setSteps(currentStep, totalNumOfSteps);
+        activity.showScore(showScore);
     }
 
-    public static void launchFragmentWithoutAnim(MainActivity activity, Fragment fragment, Integer currentStep, Integer totalNumOfSteps, String TAG) {
+    public static void launchFragmentWithoutAnim(MainActivity activity, Fragment fragment, Integer currentStep, Integer totalNumOfSteps, String TAG, boolean showScore) {
+        Character.remove(activity);
         activity.getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_container, fragment, TAG)
                 .commit();
         activity.setSteps(currentStep, totalNumOfSteps);
+        activity.showScore(showScore);
     }
 
     public static void shuffleArray(int[] array, Random r) {

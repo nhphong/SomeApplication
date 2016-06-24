@@ -20,4 +20,13 @@
         android:layout_alignParentBottom="true"
         android:clipToPadding="false"/>
 
+    <com.eezy.someapplication.view.ScoreView
+        android:id="@+id/score_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/margin_xxxbig"
+        android:layout_marginBottom="@dimen/margin"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"/>
+
 </RelativeLayout>

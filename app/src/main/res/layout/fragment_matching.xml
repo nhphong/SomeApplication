@@ -20,4 +20,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
+    <ImageView
+        android:id="@+id/btn_help"
+        android:layout_width="@dimen/btn_size_small"
+        android:layout_height="@dimen/btn_size_small"
+        android:src="@drawable/btn_help"
+        android:layout_marginRight="@dimen/margin_big"
+        android:layout_marginBottom="@dimen/margin"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"/>
+
 </RelativeLayout>

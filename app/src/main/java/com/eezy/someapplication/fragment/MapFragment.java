@@ -33,8 +33,7 @@ public class MapFragment extends Fragment implements MultiPaneView.OnTouchListen
     private ImageView mMusicBtn;
 
     public static void launch(MainActivity activity) {
-        Character.remove(activity);
-        Util.launchFragmentWithoutAnim(activity, new MapFragment(), null, null, TAG);
+        Util.launchFragmentWithoutAnim(activity, new MapFragment(), null, null, TAG, false);
         activity.allowBackgroundMusic2(true);
     }
 

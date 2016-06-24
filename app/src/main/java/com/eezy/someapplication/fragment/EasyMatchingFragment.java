@@ -21,7 +21,7 @@ public class EasyMatchingFragment extends BaseMatchingFragment {
     public static final String TAG = EasyMatchingFragment.class.getSimpleName();
 
     public static void launch(MainActivity activity) {
-        Util.launchFragment(activity, new EasyMatchingFragment(), 1, 3, TAG);
+        Util.launchFragment(activity, new EasyMatchingFragment(), 1, 3, TAG, true);
     }
 
     private List<Integer> caseIndices;

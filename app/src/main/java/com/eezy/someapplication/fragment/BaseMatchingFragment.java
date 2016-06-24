@@ -88,7 +88,7 @@ public abstract class BaseMatchingFragment extends Fragment {
         Pane equalSign = new Pane(null, GeoUtil.inflate(new Point(boundingRect.centerX(), boundingRect.centerY()), smallMargin));
         equalSign.setBackground(context, R.drawable.equal_sign);
 
-        List<Pane> targetPanes = fillInResources(resIds, cause1, cause2, result);
+        final List<Pane> targetPanes = fillInResources(resIds, cause1, cause2, result);
         endPos = targetPanes.get(0).center(0, 0);
         for (Pane p : targetPanes) {
             p.setBackground(context, R.drawable.question_mark);
@@ -159,6 +159,17 @@ public abstract class BaseMatchingFragment extends Fragment {
         if (hasDemo) {
             MovingHand.show(this, (ViewGroup) mView, startPos, endPos);
         }
+
+        final Point src = startPos;
+        mView.findViewById(R.id.btn_help).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                for (Pane p : targetPanes) {
+                    Point des = p.center(0, 0);
+                    MovingHand.show(BaseMatchingFragment.this, (ViewGroup) mView, src, des);
+                }
+            }
+        });
     }
 
     protected void setPaneBackgroundAndDescription(Pane p, int bkResId, String description) {
@@ -177,6 +188,7 @@ public abstract class BaseMatchingFragment extends Fragment {
 
         if (Content.isMatched(cause1.getName(), cause2.getName(), result.getName())) {
             Character.sayYay1(mActivity);
+            mActivity.addScore(3);
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -188,6 +200,7 @@ public abstract class BaseMatchingFragment extends Fragment {
             }, 1000);
         } else {
             Character.sayUhOh1(mActivity);
+            mActivity.addScore(-1);
 //            new Handler().postDelayed(new Runnable() {
 //                @Override
 //                public void run() {
