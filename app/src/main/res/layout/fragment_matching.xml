@@ -10,11 +10,6 @@
         android:layout_height="match_parent"
         android:scaleType="centerCrop"/>
 
-    <RelativeLayout
-        android:id="@+id/background_overlay"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
     <com.eezy.someapplication.view.DragablePaneView
         android:id="@+id/dragable_pane_view"
         android:layout_width="match_parent"

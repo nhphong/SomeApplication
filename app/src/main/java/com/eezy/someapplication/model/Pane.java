@@ -68,7 +68,7 @@ public class Pane {
             Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
             textPaint.setTextAlign(Paint.Align.CENTER);
             textPaint.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/UTM Cookies.ttf"));
-            textPaint.setTextSize(37);
+            textPaint.setTextSize(33);
             textPaint.setColor(textColor);
             canvas.drawText(text, canvas.getWidth() * textPosPercentX, canvas.getHeight() * textPosPercentY, textPaint);
         }

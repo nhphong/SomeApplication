@@ -6,6 +6,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 
+import com.eezy.someapplication.fragment.DifficultMatchingFragment;
+import com.eezy.someapplication.fragment.EasyMatchingFragment;
+import com.eezy.someapplication.fragment.ExtremelyDifficultMatchingFragment;
 import com.eezy.someapplication.fragment.MapFragment;
 import com.eezy.someapplication.util.MediaUtil;
 import com.eezy.someapplication.view.NavigationControl;
@@ -22,6 +25,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         findViewById(R.id.btn_home).setOnClickListener(this);
+        findViewById(R.id.btn_1).setOnClickListener(this);
+        findViewById(R.id.btn_2).setOnClickListener(this);
+        findViewById(R.id.btn_3).setOnClickListener(this);
         mControl = (NavigationControl) findViewById(R.id.navigation_control);
         mMediaUtil = new MediaUtil(this);
         MapFragment.launch(this);
@@ -49,6 +55,15 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         switch (v.getId()) {
             case R.id.btn_home:
                 MapFragment.launch(this);
+                break;
+            case R.id.btn_1:
+                EasyMatchingFragment.launch(this);
+                break;
+            case R.id.btn_2:
+                DifficultMatchingFragment.launch(this);
+                break;
+            case R.id.btn_3:
+                ExtremelyDifficultMatchingFragment.launch(this);
                 break;
         }
     }

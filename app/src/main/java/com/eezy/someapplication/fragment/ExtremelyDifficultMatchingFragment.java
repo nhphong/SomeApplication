@@ -16,12 +16,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-public class EasyMatchingFragment extends BaseMatchingFragment {
+public class ExtremelyDifficultMatchingFragment extends BaseMatchingFragment {
 
-    public static final String TAG = EasyMatchingFragment.class.getSimpleName();
+    public static final String TAG = ExtremelyDifficultMatchingFragment.class.getSimpleName();
 
     public static void launch(MainActivity activity) {
-        Util.launchFragment(activity, new EasyMatchingFragment(), 1, 3, TAG);
+        Util.launchFragment(activity, new ExtremelyDifficultMatchingFragment(), 3, 3, TAG);
     }
 
     private List<Integer> caseIndices;
@@ -54,32 +54,9 @@ public class EasyMatchingFragment extends BaseMatchingFragment {
     @Override
     protected List<Pane> fillInResources(List<Integer> resIds, Pane cause1, Pane cause2, Pane result) {
         List<Pane> targetPanes = new ArrayList<>();
-        int id;
-
-        switch (resIds.remove(0)) {
-            case 0:
-                targetPanes.add(cause1);
-                id = resIds.remove(0);
-                setPaneBackgroundAndDescription(cause2, id, Content.getCaseDescription(id));
-                id = resIds.remove(0);
-                setPaneBackgroundAndDescription(result, id, Content.getCaseDescription(id));
-                break;
-            case 1:
-                id = resIds.remove(0);
-                setPaneBackgroundAndDescription(cause1, id, Content.getCaseDescription(id));
-                targetPanes.add(cause2);
-                id = resIds.remove(0);
-                setPaneBackgroundAndDescription(result, id, Content.getCaseDescription(id));
-                break;
-            default:
-                id = resIds.remove(0);
-                setPaneBackgroundAndDescription(cause1, id, Content.getCaseDescription(id));
-                id = resIds.remove(0);
-                setPaneBackgroundAndDescription(cause2, id, Content.getCaseDescription(id));
-                targetPanes.add(result);
-                break;
-        }
-
+        targetPanes.add(cause1);
+        targetPanes.add(cause2);
+        targetPanes.add(result);
         return targetPanes;
     }
 
@@ -91,15 +68,11 @@ public class EasyMatchingFragment extends BaseMatchingFragment {
 
         Case currentCase = cases.remove((int) (caseIndices.get(index)));
         index = (index + 1) % caseIndices.size();
-        int index = r.nextInt(3);
-        List<Integer> items = currentCase.split();
-        int missingItem = items.remove(index);
 
-        result.add(index);
-        result.addAll(items);
+        List<Integer> items = currentCase.split();
 
         List<Integer> candidateItems = new ArrayList<>();
-        candidateItems.add(missingItem);
+        candidateItems.addAll(items);
 
         List<Integer> temp = new ArrayList<>();
         for (Case c : cases) {
@@ -107,7 +80,7 @@ public class EasyMatchingFragment extends BaseMatchingFragment {
         }
         Collections.shuffle(temp, r);
 
-        candidateItems.addAll(temp.subList(0, 4));
+        candidateItems.addAll(temp.subList(0, 2));
         Collections.shuffle(candidateItems, r);
 
         result.addAll(candidateItems);

@@ -8,11 +8,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import com.eezy.someapplication.MainActivity;
 import com.eezy.someapplication.R;
@@ -38,12 +38,11 @@ public abstract class BaseMatchingFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mActivity = (MainActivity) getActivity();
-        mView = inflater.inflate(R.layout.fragment_facial, container, false);
+        mView = inflater.inflate(R.layout.fragment_matching, container, false);
         mDragablePaneView = (DragablePaneView) mView.findViewById(R.id.dragable_pane_view);
 
         setupResources();
         setBackground((ImageView) mView.findViewById(R.id.background));
-        setBackgroundOverlay((RelativeLayout) mView.findViewById(R.id.background_overlay));
         setTitle((PageTitleView) mView.findViewById(R.id.page_title_view));
         setUpPaneView(mDragablePaneView, true);
         return mView;
@@ -54,11 +53,11 @@ public abstract class BaseMatchingFragment extends Fragment {
         Context context = getContext();
         Point startPos = null;
         Point endPos;
-        Pane targetPane;
+
         List<Integer> resIds = retrieveResources();
 
-        int top = (int) (screenSize.y * 0.3);
-        int bottom = (int) (screenSize.y * 0.48);
+        int top = (int) (screenSize.y * 0.28);
+        int bottom = (int) (screenSize.y * 0.46);
         int side = bottom - top;
         int margin = (int) (screenSize.x * 0.14);
         int smallMargin = margin / 8;
@@ -89,30 +88,15 @@ public abstract class BaseMatchingFragment extends Fragment {
         Pane equalSign = new Pane(null, GeoUtil.inflate(new Point(boundingRect.centerX(), boundingRect.centerY()), smallMargin));
         equalSign.setBackground(context, R.drawable.equal_sign);
 
-        switch (resIds.remove(0)) {
-            case 0:
-                targetPane = cause1;
-                setPaneBackgroundAndDescription(cause2, resIds.remove(0), "phong");
-                setPaneBackgroundAndDescription(result, resIds.remove(0), "phong");
-                break;
-            case 1:
-                setPaneBackgroundAndDescription(cause1, resIds.remove(0), "phong");
-                targetPane = cause2;
-                setPaneBackgroundAndDescription(result, resIds.remove(0), "phong");
-                break;
-            default:
-                setPaneBackgroundAndDescription(cause1, resIds.remove(0), "phong");
-                setPaneBackgroundAndDescription(cause2, resIds.remove(0), "phong");
-                targetPane = result;
-                break;
+        List<Pane> targetPanes = fillInResources(resIds, cause1, cause2, result);
+        endPos = targetPanes.get(0).center(0, 0);
+        for (Pane p : targetPanes) {
+            p.setBackground(context, R.drawable.question_mark);
         }
-
-        endPos = targetPane.center(0, 0);
-        targetPane.setBackground(context, R.drawable.question_mark);
 
         Pane border = new Pane(null, GeoUtil.inflate(GeoUtil.getBoundingRect(cause1, result), smallMargin, smallMargin));
         Paint borderPaint = new Paint();
-        borderPaint.setColor(context.getColor(R.color.happy_subtitle));
+        borderPaint.setColor(context.getResources().getColor(R.color.happy_subtitle));
         borderPaint.setStyle(Paint.Style.STROKE);
         borderPaint.setStrokeJoin(Paint.Join.ROUND);
         borderPaint.setStrokeCap(Paint.Cap.ROUND);
@@ -138,7 +122,7 @@ public abstract class BaseMatchingFragment extends Fragment {
 
         for (int i = 0; i < resIds.size(); ++i) {
             Pane pivotPane;
-            int offset = side + 4 * smallMargin;
+            int offset = side + 3 * smallMargin;
 
             if (i == 0) {
                 pivotPane = cause1;
@@ -156,10 +140,13 @@ public abstract class BaseMatchingFragment extends Fragment {
 
             Point center = pivotPane.center(0, offset);
             Pane p = new Pane(null, GeoUtil.inflate(center, side / 2));
-            setPaneBackgroundAndDescription(p, resIds.get(i), "phong");
+            int id = resIds.get(i);
+            setPaneBackgroundAndDescription(p, id, Content.getCaseDescription(id));
             p.setMovable(true);
             paneView.addPane(p);
-            paneView.addTargetPaneFor(targetPane, p, listener);
+            for (Pane targetPane : targetPanes) {
+                paneView.addTargetPaneFor(targetPane, p, listener);
+            }
 
             if (i == 1) {
                 startPos = p.center(0, 0);
@@ -174,40 +161,45 @@ public abstract class BaseMatchingFragment extends Fragment {
         }
     }
 
-    private void setPaneBackgroundAndDescription(Pane p, int bkResId, String description) {
+    protected void setPaneBackgroundAndDescription(Pane p, int bkResId, String description) {
         p.setBackground(getContext(), bkResId, description, 0.5f, 0.96f, getResources().getColor(R.color.desc_color));
         p.setName(String.valueOf(bkResId));
     }
 
     private void verifyResult(Pane cause1, Pane cause2, Pane result) {
-        if (cause1.getBackground() != null && cause2.getBackground() != null && result.getBackground() != null) {
-            if (Content.isMatched(cause1.getName(), cause2.getName(), result.getName())) {
-                Character.sayYay1(mActivity);
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Character.remove(mActivity);
-                        mDragablePaneView.removeAllPanes();
-                        mDragablePaneView.resetTargetPaneReachListener();
-                        setUpPaneView(mDragablePaneView, false);
-                    }
-                }, 1000);
-            } else {
-                Character.sayUhOh1(mActivity);
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Character.remove(mActivity);
-                    }
-                }, 1000);
-            }
+        if (cause1.getBackground() == null || cause2.getBackground() == null || result.getBackground() == null) {
+            return;
+        }
+
+        if (TextUtils.isEmpty(cause1.getName()) || TextUtils.isEmpty(cause2.getName()) || TextUtils.isEmpty(result.getName())) {
+            return;
+        }
+
+        if (Content.isMatched(cause1.getName(), cause2.getName(), result.getName())) {
+            Character.sayYay1(mActivity);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Character.remove(mActivity);
+                    mDragablePaneView.removeAllPanes();
+                    mDragablePaneView.resetTargetPaneReachListener();
+                    setUpPaneView(mDragablePaneView, false);
+                }
+            }, 1000);
+        } else {
+            Character.sayUhOh1(mActivity);
+//            new Handler().postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    Character.remove(mActivity);
+//                }
+//            }, 1000);
         }
     }
 
     protected abstract void setupResources();
+    protected abstract List<Integer> retrieveResources();
     protected abstract void setTitle(PageTitleView pageTitleView);
     protected abstract void setBackground(ImageView background);
-    protected abstract void setBackgroundOverlay(RelativeLayout layout);
-    protected abstract List<Integer> retrieveResources();
-    protected abstract void moveOnToNextStep();
+    protected abstract List<Pane> fillInResources(List<Integer> resIds, Pane cause1, Pane cause2, Pane result);
 }
